@@ -156,37 +156,31 @@ const Graph = () => {
             currentVert.setColor('black')     
             } 
         }
-        console.log(myGraph.getVertex('sage').getDistance())
     }
+
     //need to find the vertex in myGraph for 'fool' and put into startingVertex
-    const verts = myGraph.getVertList()
-    for(v in verts){
-        if(verts[v].getId() === 'fool'){
-            startingVertex = verts[v]
+    const getStartingVertex = (word, graph) => {
+        const verts = graph.getVertList()
+        for(v in verts){
+            if(verts[v].getId() === word){
+                return verts[v]
+            }
         }
     }
 
-    binaryFirstSearch(myGraph, startingVertex) 
-    /* const g2 = Graph()
-    g2.addVertex(4)
-    g2.addVertex(3)
-    g2.addVertex(5)
-    g2.addEdge(0,1,5)
-    g2.addEdge(1,2,34)
-    g2.addEdge(2,3,34)
-    g2.addEdge(32,3,34)
-    g2.addEdge(0,2,4)
-    g2.addEdge(4,3,2)
-    g2.addEdge(4,5,1)
-    const vertList = g2.getVertList()
-    //iterate over every edge pairing
-    for( v in vertList) {
-        const vertex = vertList[v]
-        const connectionsObject = vertex.getConnections()
-        for (x of connectionsObject){
-            console.log("( ",v," , ", x[0].getId()," )")
+    const traverseGraph = (y) => {
+        let x = y 
+        while (x.getPred() !== null ){
+            console.log(x.getId(),x.getDistance())
+            x = x.getPred()
         }
-    } */
+        console.log(x.getId(),x.getDistance())
+        return y.getDistance()
+    }
+
+    const startingVertex = getStartingVertex('head',myGraph)
+    binaryFirstSearch(myGraph, startingVertex) 
+    console.log(traverseGraph(myGraph.getVertex('tail')))
 })()
 
 

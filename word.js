@@ -1,6 +1,6 @@
 
-module.exports = ["foil","fail","fall", "pall", "pole", "poll", "pool", "cool", "fool", "foul", "pope", "pale", "sale", "page", "sage"]
-/*module.exports = ["aahs",
+//module.exports = ["foil","fail","fall", "pall", "pole", "poll", "pool", "cool", "fool", "foul", "pope", "pale", "sale", "page", "sage"]
+module.exports = ["aahs",
 "abbe",
 "abbr",
 "abed",
@@ -3129,4 +3129,4 @@ module.exports = ["foil","fail","fall", "pall", "pole", "poll", "pool", "cool", 
 "zoos",
 "zori",
 "zulu",
-"zuni"] */
+"zuni"] 
