@@ -6,15 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "node_modules/.bin/nodemon index.js"
+    "dev": "NODE_ENV=development node_modules/.bin/nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "google-auth-library": "^7.14.0"
   },
   "devDependencies": {
+    "dotenv": "^16.0.0",
     "nodemon": "^2.0.15"
   }
 }
