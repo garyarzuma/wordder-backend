@@ -6,6 +6,11 @@ app.use(cors())
 const { OAuth2Client } = require('google-auth-library')
 const { config } = require('dotenv')
 const client = new OAuth2Client(process.env.CLIENT_ID)
+const mongoose = require('mongoose')
+const User = require('./models/user')
+const MONGODB_URI = process.env.MONGODB_URI
+const logger = require('./utils/logger')
+const middleware = require('./utils/middleware')
 
 let notes = [
   {
@@ -29,17 +34,18 @@ let notes = [
 ]
 
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-
 app.use(express.json())
+app.use(middleware.requestLogger)
 
-app.use(requestLogger)
+logger.info('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    logger.info('error connecting to MongoDB:', error.message)
+  })
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -56,30 +62,49 @@ app.delete('/api/notes/:id', (request, response) => {
   response.status(204).end()
 })
 
-app.post("/api/v1/auth/google", async (req, res) => {
+app.post("/api/v1/auth/google", async (req, res, next) => {
     const {token}   = req.body
     const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.CLIENT_ID
     });
-    const { name, email, picture } = ticket.getPayload();    
-    console.log(name)
-    /*const user = await db.user.upsert({ 
-        where: { email: email },
-        update: { name, picture },
-        create: { name, email, picture }
-    })*/
-    res.status(201)
-    //res.json(user) 
+    const { given_name, family_name, name, email, picture } = ticket.getPayload(); 
+    const userExist = await User.findOne({ username: email })  
+
+    if (!userExist){
+        try{
+            const user = new User({
+                username: email,
+                name: name,
+                fname:given_name,
+                lname: family_name,
+                passwordHash: "none",
+                picURL: picture
+            })
+            const savedUser = await user.save()
+            res.status(201)
+            res.json(savedUser) 
+        }catch (error) {
+            next(error)
+        }
+    }
+    else{
+        const Existinguser = {
+            username: email,
+            name: name,
+            fname:given_name,
+            lname: family_name,
+            passwordHash: "none",
+            picURL: picture
+        }
+        const updatedUserInfo = await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
+        res.json(updatedUserInfo)
+    }
 })
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
 
-
-
-app.use(unknownEndpoint)
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 const PORT = 3001
 app.listen(PORT, () => {
