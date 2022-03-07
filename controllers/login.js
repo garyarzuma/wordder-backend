@@ -30,7 +30,7 @@ loginRouter.post('/wordderLogin', async (request, response) => {
     process.env.SECRET,
     { expiresIn: 60*60 }
   )
-
+ 
   response
     .status(200)
     .send({ token, user: user })
