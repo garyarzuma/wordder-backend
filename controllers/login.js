@@ -18,10 +18,10 @@ loginRouter.post('/wordderLogin/signup', async (request, response) => {
           passwordHash: hash,
       })
       console.log(user)
-      //const savedUser = await user.save()
+      const savedUser = await user.save()
       response
       .status(200)
-      .send( user)
+      .send( savedUser)
     }
     catch(error){
       console.log(error)
