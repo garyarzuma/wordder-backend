@@ -4,11 +4,34 @@ const loginRouter = require('express').Router()
 const User = require('../models/user')
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.CLIENT_ID)
+const saltRounds = 10
+
+loginRouter.post('/wordderLogin/signup', async (request, response) => {
+  const body = request.body
+  console.log("signinup")
+  bcrypt.hash(body.password, saltRounds, async function(err, hash) {
+    try{
+      const user = new User({
+          email: body.email,
+          fname: body.fname,
+          lname: body.lname,
+          passwordHash: hash,
+      })
+      console.log(user)
+      //const savedUser = await user.save()
+      response
+      .status(200)
+      .send( user)
+    }
+    catch(error){
+      console.log(error)
+    }
+  });
+})
 
 loginRouter.post('/wordderLogin', async (request, response) => {
   const body = request.body
   const user = await User.findOne({ email: body.email })
-
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(body.password, user.passwordHash)
@@ -69,7 +92,6 @@ loginRouter.post("/v1/auth/google", async (req, res, next) => {
           name: name,
           fname:given_name,
           lname: family_name,
-          passwordHash: "none",
           picURL: picture
       }
       const updatedUserInfo = await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
