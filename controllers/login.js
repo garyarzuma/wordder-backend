@@ -6,6 +6,42 @@ const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.CLIENT_ID)
 const saltRounds = 10
 
+loginRouter.post('/facebookLogin', async (request, response) => {
+  const body = request.body
+  const userExist = await User.findOne({ email: body.email }) 
+
+  if (!userExist){
+    try{
+        const user = new User({
+            email: body.email,
+            name: body.name,
+            fname: body.name,
+            lname: null,
+            passwordHash: "none",
+            picURL: body.picture.data.url
+        })
+        const savedUser = await user.save()
+        response.status(201)
+        response.json(savedUser) 
+    }catch (error) {
+      console.log(error)
+      response.status(401).send(error)
+    }
+}
+else{
+    const Existinguser = {
+      email: body.email,
+      name: body.name,
+      fname: body.name,
+      lname: null,
+      picURL: body.picture.data.url
+    }
+    const updatedUserInfo = await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
+    response.json(updatedUserInfo)
+}
+
+})
+
 loginRouter.post('/wordderLogin/signup', async (request, response) => {
   const body = request.body
   console.log("signinup")
