@@ -20,9 +20,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  avgGuesses: {
-    type: Number,
-    default: 0,
+  guessesArray: {
+    type: [Number],
+    default: [],
   }
 })
 
