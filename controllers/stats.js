@@ -2,8 +2,8 @@ const statsRouter = require('express').Router()
 const User = require('../models/user')
 
 statsRouter.post('/updateStats', async (request, response) => {
-  const body = request.body
-  const user = await User.findOne({ email: body.email }) 
+  const email = request.body
+  const user = await User.findOne(email) 
   const newStats = {
     ...user, gamesWon:user.gamesWon++
   }
