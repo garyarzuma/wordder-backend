@@ -15,7 +15,15 @@ const userSchema = new mongoose.Schema({
      type: String,
      required: true
   },
-  picURL: String
+  picURL: String,
+  gamesWon: {
+    type: Number,
+    default: 0,
+  },
+  avgGuesses: {
+    type: Number,
+    default: 0,
+  }
 })
 
 userSchema.plugin(uniqueValidator)

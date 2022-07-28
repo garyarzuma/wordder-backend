@@ -10,6 +10,7 @@ const MONGODB_URI = process.env.MONGODB_URI
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const loginRouter = require('./controllers/login')
+const statsRouter = require('./controllers/stats')
 
 const options = {
     key: fs.readFileSync('./cert.key'),
@@ -30,6 +31,7 @@ mongoose.connect(MONGODB_URI)
   })
 
 app.use('/api/login', loginRouter)
+app.use('/api/stats', statsRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
