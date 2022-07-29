@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
   guessesArray: {
     type: [Number],
     default: [],
+  },
+  idealGuessesArray: {
+    type: [Number],
+    default: [],
   }
 })
 

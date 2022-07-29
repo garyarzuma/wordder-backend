@@ -5,9 +5,13 @@ statsRouter.post('/updateStats', async (request, response) => {
   console.log(request.body)
   const email = request.body.email
   const newGuess = request.body.newGuess
+  const idealGuess = request.body.idealGuess
   const user = await User.findOne({email: email}) 
   const newStats = {
-    ...user, gamesWon:user.gamesWon++, guessesArray: user.guessesArray.push(newGuess)
+    ...user, 
+    gamesWon:user.gamesWon++, 
+    guessesArray: user.guessesArray.push(newGuess), 
+    idealGuessesArray: user.idealGuessesArray.push(idealGuess)
   }
   const updatedUserInfo = await User.findByIdAndUpdate(user._id, newStats, { new: true })
   response.json(updatedUserInfo)
