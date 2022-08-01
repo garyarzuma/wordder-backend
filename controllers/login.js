@@ -61,7 +61,7 @@ loginRouter.post('/wordderLogin/signup', async (request, response) => {
     }
     catch(error){
       console.log(error)
-      response.status(401).send(error)
+      response.status(400).send(error)
     }
   });
 })

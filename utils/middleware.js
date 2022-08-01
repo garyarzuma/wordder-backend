@@ -32,7 +32,7 @@ const errorHandler = (error, request, response, next) => {
       error: 'token expired'
     })
   }
-  logger.error(error.message)
+  //logger.error(error.message, error.name, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
   next(error)
 }
 
