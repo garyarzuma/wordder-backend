@@ -42,7 +42,7 @@ else{
 
 })
 
-loginRouter.post('/wordderLogin/signup', async (request, response) => {
+loginRouter.post('/wordderLogin/signup', async (request, response, next) => {
   const body = request.body
   console.log("signinup")
   bcrypt.hash(body.password, saltRounds, async function(err, hash) {
@@ -60,8 +60,8 @@ loginRouter.post('/wordderLogin/signup', async (request, response) => {
       .send( savedUser)
     }
     catch(error){
+      next(error)
       console.log(error)
-      response.status(400).send(error)
     }
   });
 })
