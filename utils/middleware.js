@@ -14,14 +14,30 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  console.log(error.errors)
+  let errorMessage = 'Error'
   if (error.name === 'CastError') {
     return response.status(400).send({ 
       error: 'malformatted id' 
     })
   } else if (error.name === 'ValidationError') {
+      const errorList = error.errors
+      if (errorList.email){
+        if (errorList.email.kind === 'unique') {
+          errorMessage = 'email unique'
+        }
+        else if (errorList.email.kind === 'required') {
+          errorMessage = 'email missing'
+        }
+      }
+      else if (errorList.passwordHash){
+        errorMessage = 'password missing'
+      }
+      else if (errorList.fname) {
+        errorMessage = 'fname missing'
+      }
+    console.log(errorMessage)
     return response.status(400).send({ 
-      error: 'Validation Error Buddy'
+      error: errorMessage
     })
   } else if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({
@@ -32,7 +48,7 @@ const errorHandler = (error, request, response, next) => {
       error: 'token expired'
     })
   }
-  logger.info(error.message, error.name, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+  logger.info(error.message, error.name)
   next(error)
 }
 
