@@ -23,17 +23,17 @@ const errorHandler = (error, request, response, next) => {
       const errorList = error.errors
       if (errorList.email){
         if (errorList.email.kind === 'unique') {
-          errorMessage = 'email unique'
+          errorMessage = 'Email already associated with Existing User'
         }
         else if (errorList.email.kind === 'required') {
-          errorMessage = 'email missing'
+          errorMessage = 'Email Required'
         }
       }
       else if (errorList.passwordHash){
-        errorMessage = 'password missing'
+        errorMessage = 'Password Required'
       }
       else if (errorList.fname) {
-        errorMessage = 'fname missing'
+        errorMessage = 'First Name Required'
       }
     console.log(errorMessage)
     return response.status(400).send({ 
