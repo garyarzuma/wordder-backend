@@ -15,6 +15,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
+  console.log(error.name)
   let errorMessage = 'Error'
   if (error.name === 'CastError') {
     return response.status(400).send({ 
@@ -41,12 +42,12 @@ const errorHandler = (error, request, response, next) => {
       error: errorMessage
     })
   } else if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({
-      error: 'invalid token'
+    return response.status(401).send({
+      error: 'Invalid Session, please login again!'
     })
   } else if (error.name === 'TokenExpiredError') {
-    return response.status(401).json({
-      error: 'token expired'
+    return response.status(401).send({
+      error: 'Session expired, please login again!'
     })
   }
   logger.info(error.message, error.name)

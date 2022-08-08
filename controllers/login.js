@@ -95,34 +95,38 @@ loginRouter.post('/wordderLogin/signup', async (request, response, next) => {
   });
 })
 
-loginRouter.post('/wordderLogin', async (request, response) => {
-  const body = request.body
-  const user = await User.findOne({ email: body.email })
-  const passwordCorrect = user === null
-    ? false
-    : await bcrypt.compare(body.password, user.passwordHash)
+loginRouter.post('/wordderLogin', async (request, response, next) => {
+  try{
+    const body = request.body
+    const user = await User.findOne({ email: body.email })
+    const passwordCorrect = user === null
+      ? false
+      : await bcrypt.compare(body.password, user.passwordHash)
 
-  if (!(user && passwordCorrect)) {
-    return response.status(401).json({
-      error: 'invalid username or password'
-    })
-  } 
+    if (!(user && passwordCorrect)) {
+      return response.status(401).json({
+        error: 'invalid username or password'
+      })
+    } 
 
-  const userForToken = {
-    email: user.email,
-    id: user._id,
+    const userForToken = {
+      email: user.email,
+      id: user._id,
+    }
+
+     // token expires in 60*60 seconds, that is, in one hour
+     const token = jwt.sign(
+      userForToken, 
+      process.env.SECRET,
+      { expiresIn: 60*60}
+    )
+
+    response
+      .status(200)
+      .send({ token, user: user })
+  } catch (error){
+    next(error)
   }
-
-   // token expires in 60*60 seconds, that is, in one hour
-   const token = jwt.sign(
-    userForToken, 
-    process.env.SECRET,
-    { expiresIn: 60*60 }
-  )
-
-  response
-    .status(200)
-    .send({ token, user: user })
 })
 
 loginRouter.post("/v1/auth/google", async (req, res, next) => {
