@@ -119,7 +119,7 @@ loginRouter.post('/wordderLogin', async (request, response) => {
     process.env.SECRET,
     { expiresIn: 60*60 }
   )
- 
+
   response
     .status(200)
     .send({ token, user: user })
@@ -160,7 +160,7 @@ loginRouter.post("/v1/auth/google", async (req, res, next) => {
       
       res
         .status(200)
-        .send({ token, user: savedUser})
+        .send({ token: wordderToken, user: savedUser})
     }catch (error) {
         next(error)
     }
@@ -187,7 +187,7 @@ loginRouter.post("/v1/auth/google", async (req, res, next) => {
      
       res
         .status(200)
-        .send({ token, user: updatedUserInfo })
+        .send({ token: wordderToken, user: updatedUserInfo })
   }
 })
 

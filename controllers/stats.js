@@ -1,12 +1,27 @@
 const statsRouter = require('express').Router()
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 statsRouter.post('/updateStats', async (request, response) => {
-  console.log(request.body)
-  const email = request.body.email
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+
+  console.log(user)
   const newGuess = request.body.newGuess
   const idealGuess = request.body.idealGuess
-  const user = await User.findOne({email: email}) 
+  /*const user = await User.findOne({email: email}) */
   const newStats = {
     ...user, 
     gamesWon:user.gamesWon++, 
