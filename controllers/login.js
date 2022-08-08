@@ -12,17 +12,31 @@ loginRouter.post('/facebookLogin', async (request, response) => {
 
   if (!userExist){
     try{
-        const user = new User({
-            email: body.email,
-            name: body.name,
-            fname: body.name,
-            lname: null,
-            passwordHash: "none",
-            picURL: body.picture.data.url
-        })
-        const savedUser = await user.save()
-        response.status(201)
-        response.json(savedUser) 
+      const user = new User({
+        email: body.email,
+        name: body.name,
+        fname: body.name,
+        lname: null,
+        passwordHash: "none",
+        picURL: body.picture.data.url
+      })
+      const savedUser = await user.save()
+      const userForToken = {
+        email: savedUser.email,
+        id: savedUser._id,
+      }
+    
+       // token expires in 60*60 seconds, that is, in one hour
+      const token = jwt.sign(
+        userForToken, 
+        process.env.SECRET,
+        { expiresIn: 60*60 }
+      )
+      
+      response
+        .status(200)
+        .send({ token, user: savedUser })
+
     }catch (error) {
       console.log(error)
       response.status(401).send(error)
@@ -36,8 +50,24 @@ else{
       lname: null,
       picURL: body.picture.data.url
     }
-    const updatedUserInfo = await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
-    response.json(updatedUserInfo)
+    const updatedUserInfo = 
+      await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
+    
+      const userForToken = {
+      email: updatedUserInfo.email,
+      id: updatedUserInfo._id,
+    }
+    
+    // token expires in 60*60 seconds, that is, in one hour
+    const token = jwt.sign(
+      userForToken, 
+      process.env.SECRET,
+      { expiresIn: 60*60 }
+    )
+      
+    response
+      .status(200)
+      .send({ token, user: updatedUserInfo })
 }
 
 })
@@ -106,21 +136,34 @@ loginRouter.post("/v1/auth/google", async (req, res, next) => {
   const userExist = await User.findOne({ email: email })  
 
   if (!userExist){
-      try{
-          const user = new User({
-              email: email,
-              name: name,
-              fname:given_name,
-              lname: family_name,
-              passwordHash: "none",
-              picURL: picture
-          })
-          const savedUser = await user.save()
-          res.status(201)
-          res.json(savedUser) 
-      }catch (error) {
-          next(error)
+    try{
+      const user = new User({
+          email: email,
+          name: name,
+          fname:given_name,
+          lname: family_name,
+          passwordHash: "none",
+          picURL: picture
+      })
+      const savedUser = await user.save()
+      const userForToken = {
+        email: savedUser.email,
+        id: savedUser._id,
       }
+    
+       // token expires in 60*60 seconds, that is, in one hour
+       const wordderToken = jwt.sign(
+        userForToken, 
+        process.env.SECRET,
+        { expiresIn: 60*60 }
+      )
+      
+      res
+        .status(200)
+        .send({ token, user: savedUser})
+    }catch (error) {
+        next(error)
+    }
   }
   else{
       const Existinguser = {
@@ -131,7 +174,20 @@ loginRouter.post("/v1/auth/google", async (req, res, next) => {
           picURL: picture
       }
       const updatedUserInfo = await User.findByIdAndUpdate(userExist._id, Existinguser, { new: true })
-      res.json(updatedUserInfo)
+      const userForToken = {
+        email: updatedUserInfo.email,
+        id: updatedUserInfo._id,
+      }
+       // token expires in 60*60 seconds, that is, in one hour
+       const wordderToken = jwt.sign(
+        userForToken, 
+        process.env.SECRET,
+        { expiresIn: 60*60 }
+      )
+     
+      res
+        .status(200)
+        .send({ token, user: updatedUserInfo })
   }
 })
 
