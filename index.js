@@ -10,6 +10,8 @@ const MONGODB_URI = process.env.MONGODB_URI
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const loginRouter = require('./controllers/login')
+const facebookRouter = require('./controllers/facebookLogin')
+const googleRouter = require('./controllers/googleLogin')
 const statsRouter = require('./controllers/stats')
 
 const options = {
@@ -31,6 +33,8 @@ mongoose.connect(MONGODB_URI)
   })
 
 app.use('/api/login', loginRouter)
+app.use('/api/login/facebookLogin', facebookRouter)
+app.use('/api/login/v1/auth/google', googleRouter)
 app.use('/api/stats', statsRouter)
 
 app.use(middleware.unknownEndpoint)
