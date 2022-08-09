@@ -20,6 +20,7 @@ const options = {
   };
 
 app.use(express.json())
+app.use(express.static('build'))
 app.use(middleware.requestLogger)
 
 logger.info('connecting to', MONGODB_URI)
@@ -40,7 +41,11 @@ app.use('/api/stats', statsRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
+
+
 const PORT = process.env.PORT || 3001
 https.createServer(options, app).listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-})
+}) 
+
+//app.listen(PORT, () => console.log(`Server on ${PORT}`))

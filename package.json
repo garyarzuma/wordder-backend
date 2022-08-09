@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "NODE_ENV=development node_modules/.bin/nodemon index.js"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node_modules/.bin/nodemon index.js",
+    "build:ui": "rm -rf build && cd ../wordder/ && npm run build && cp -r build ../wordder-backend",
+    "deploy": "git push heroku main",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",    
+    "logs:prod": "heroku logs --tail"
   },
   "author": "",
   "license": "ISC",
