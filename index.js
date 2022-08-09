@@ -13,6 +13,7 @@ const loginRouter = require('./controllers/login')
 const facebookRouter = require('./controllers/facebookLogin')
 const googleRouter = require('./controllers/googleLogin')
 const statsRouter = require('./controllers/stats')
+path = require('path')
 
 const options = {
     key: fs.readFileSync('./cert.key'),
@@ -20,7 +21,7 @@ const options = {
   };
 
 app.use(express.json())
-app.use(express.static('build'))
+
 app.use(middleware.requestLogger)
 
 logger.info('connecting to', MONGODB_URI)
@@ -38,13 +39,21 @@ app.use('/api/login/facebookLogin', facebookRouter)
 app.use('/api/login/v1/auth/google', googleRouter)
 app.use('/api/stats', statsRouter)
 
+app.use(express.static('build'));
+
+app.use('/*', (req, res) => {
+  res.sendFile(path.join(__dirname.at,'.', 'build', 'index.html'));
+ });
+
+
+
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 
 
 const PORT = process.env.PORT || 3001
-//https.createServer(options, app).listen(PORT, () => {
+// https.createServer(options, app).listen(PORT, () => {
  // console.log(`Server running on port ${PORT}`)
 //}) 
 
