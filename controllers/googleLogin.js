@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken')
 const googleRouter = require('express').Router()
 const User = require('../models/user')
 const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client(process.env.CLIENT_ID)
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 googleRouter.post("/", async (req, res, next) => {
   console.log(req.body)
   const {token}   = req.body
   const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.CLIENT_ID
+      audience: process.env.GOOGLE_CLIENT_ID
   });
   const { given_name, family_name, name, email, picture } = ticket.getPayload(); 
   const userExist = await User.findOne({ email: email })  
