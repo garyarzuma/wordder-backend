@@ -37,7 +37,6 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-logger.info("LEts see some ENV stuff ", process.env.GOOGLE_CLIENT_ID)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
