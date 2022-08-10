@@ -29,7 +29,7 @@ mongoose.connect(MONGODB_URI)
 
 app.use('/api/login', loginRouter)
 app.use('/api/login/facebookLogin', facebookRouter)
-app.use('/api/login/v1/auth/google', googleRouter)
+app.use('/api/login/googleLogin', googleRouter)
 app.use('/api/stats', statsRouter)
 
 app.use(express.static(path.join(__dirname, 'build')));
