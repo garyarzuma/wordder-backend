@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.b7e8dc89.css",
-    "main.js": "/static/js/main.a3dabaa8.js",
+    "main.css": "/static/css/main.c42d7b1b.css",
+    "main.js": "/static/js/main.9056edc7.js",
     "static/media/TAHOMABD.TTF": "/static/media/TAHOMABD.85c2f3c38475e9ca1850.TTF",
     "static/media/EveryRunRegular-ZV5pK.ttf": "/static/media/EveryRunRegular-ZV5pK.4985f167418fe55ebaa3.ttf",
     "static/media/wordder-logo.jpg": "/static/media/wordder-logo.e8dfdcd8864f6b2120e7.jpg",
     "static/media/Dosis-SemiBold.ttf": "/static/media/Dosis-SemiBold.b1785824d170374315dc.ttf",
     "static/media/default-profile-pic.PNG": "/static/media/default-profile-pic.9a13e7905ce29d2da187.PNG",
     "index.html": "/index.html",
-    "main.b7e8dc89.css.map": "/static/css/main.b7e8dc89.css.map",
-    "main.a3dabaa8.js.map": "/static/js/main.a3dabaa8.js.map"
+    "main.c42d7b1b.css.map": "/static/css/main.c42d7b1b.css.map",
+    "main.9056edc7.js.map": "/static/js/main.9056edc7.js.map"
   },
   "entrypoints": [
-    "static/css/main.b7e8dc89.css",
-    "static/js/main.a3dabaa8.js"
+    "static/css/main.c42d7b1b.css",
+    "static/js/main.9056edc7.js"
   ]
 }

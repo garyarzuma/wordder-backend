@@ -25,17 +25,20 @@ const errorHandler = (error, request, response, next) => {
       const errorList = error.errors
       if (errorList.email){
         if (errorList.email.kind === 'unique') {
-          errorMessage = 'Email already associated with Existing User'
+          errorMessage = 'Email already associated with Existing User!'
         }
         else if (errorList.email.kind === 'required') {
-          errorMessage = 'Email Required'
+          errorMessage = 'Email Required!'
+        }
+        else if (errorList.email.kind === 'minlength') {
+          errorMessage = 'Email must be at least 3 characters long!'
         }
       }
       else if (errorList.passwordHash){
-        errorMessage = 'Password Required'
+        errorMessage = 'Password Required!'
       }
       else if (errorList.fname) {
-        errorMessage = 'First Name Required'
+        errorMessage = 'First Name Required!'
       }
     console.log(errorMessage)
     return response.status(400).send({ 
