@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
+const todayDate = new Date()
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -30,6 +31,18 @@ const userSchema = new mongoose.Schema({
   idealGuessesArray: {
     type: [Number],
     default: [],
+  },
+  numberOfDailiesCompleted: {
+    type: Number,
+    default: 0,
+  },
+  longestStreak: {
+    type: Number,
+    default: 0,
+  },
+  lastDailyDayWon: {
+    type: Date,
+    default: todayDate
   }
 })
 

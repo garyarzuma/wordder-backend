@@ -1,6 +1,7 @@
 const statsRouter = require('express').Router()
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { longestStreakCheck } = require('../utils/helperFunctions')
 
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
@@ -10,8 +11,9 @@ const getTokenFrom = request => {
   return null
 }
 
-statsRouter.post('/updateStats', async (request, response, next) => {
+statsRouter.post('/updateStats/:daily', async (request, response, next) => {
   try{
+    const todaysDate = new Date()
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!decodedToken.id) {
@@ -23,12 +25,22 @@ statsRouter.post('/updateStats', async (request, response, next) => {
     const newGuess = request.body.newGuess
     const idealGuess = request.body.idealGuess
     /*const user = await User.findOne({email: email}) */
-    const newStats = {
-      ...user, 
+    let newStats = {
       gamesWon:user.gamesWon++, 
       guessesArray: user.guessesArray.push(newGuess), 
-      idealGuessesArray: user.idealGuessesArray.push(idealGuess)
+      idealGuessesArray: user.idealGuessesArray.push(idealGuess),
+      ...user
     }
+    console.log(newStats)
+    if (request.params.daily === 'daily'){
+      newStats = {
+        numberOfDailiesCompleted:newStats.numberOfDailiesCompleted++, 
+        lastDailyDayWon: todaysDate, 
+        longestStreak: longestStreakCheck(todaysDate,newStats.lastDailyDayWon) ? newStats.longestStreak++ : 1,
+        ...newStats
+      }
+      console.log("we are in",newStats)
+    } 
     const updatedUserInfo = await User.findByIdAndUpdate(user._id, newStats, { new: true })
     response.json(updatedUserInfo)
   } catch (error) {
