@@ -1,9 +1,12 @@
 const longestStreakCheck = (now, lastDate) => {
-    console.log(lastDate)
-    actualNextDate = new Date(lastDate.getFullYear(),lastDate.getMonth(),lastDate.getDay()+1)
-    return ([now.getFullYear(), now.getMonth(), now.getDay()] === 
-        [actualNextDate.getFullYear(), actualNextDate.getMonth(), actualNextDate.getDay()]
-    )        
+
+    actualNextDate = new Date(lastDate.getFullYear(),lastDate.getMonth(),lastDate.getDate()+1)
+
+    isNextDayBool = now.getFullYear() === actualNextDate.getFullYear() 
+        && now.getMonth() === actualNextDate.getMonth() 
+        && now.getDate() === actualNextDate.getDate()
+
+    return isNextDayBool       
 }
 
 module.exports = {
