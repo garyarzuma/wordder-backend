@@ -46,4 +46,11 @@ statsRouter.get('/getStats/:email', async (request, response) => {
   response.json(user)
 })
 
+statsRouter.get('/getLastDatePlayed/:email', async (request, response) => {
+  const email = request.params.email 
+  const user = await User.findOne({ email: email }) 
+  console.log(user.lastDailyDayWon, user)
+  response.json(user.lastDailyDayWon)
+})
+
 module.exports = statsRouter
